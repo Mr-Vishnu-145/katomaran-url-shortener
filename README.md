@@ -171,7 +171,7 @@ This project is optimized for deployment on free cloud hosting platforms. Here i
 ---
 
 ## 🎥 Demo Video & Outputs
-- **Loom/YouTube Demo Video**: [Watch Demo Video](https://youtu.be/dummy-linksphere-ai)
+- **Loom/YouTube Demo Video**: [Watch Demo Video](https://youtu.be/n43yz7pbvkM)
 - **Default Credentials**:
   - **Admin User**: admin@gmail.com / AdminPass123!
   - **Standard User**: Self-register via `/register`
