@@ -29,11 +29,11 @@ export default function Navbar({ toggleMobileSidebar }) {
   const handleLogout = async () => {
     setDropdownOpen(false);
     try {
+      navigate('/dashboard');
       await api.post('/api/auth/logout');
       queryClient.clear();
       logout();
       toast.success('Logged out successfully', { duration: 3000 });
-      navigate('/dashboard');
     } catch (err) {
       toast.error('Logout failed');
     }

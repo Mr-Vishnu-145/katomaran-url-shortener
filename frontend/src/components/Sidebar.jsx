@@ -13,11 +13,11 @@ export default function Sidebar({ isCollapsed, onMobileClose, mobile = false }) 
 
   const handleLogout = async () => {
     try {
+      navigate('/dashboard');
       await api.post('/api/auth/logout');
       queryClient.clear();
       logout();
       toast.success('Logged out successfully', { duration: 3000 });
-      navigate('/dashboard');
     } catch (err) {
       toast.error('Logout failed');
     }

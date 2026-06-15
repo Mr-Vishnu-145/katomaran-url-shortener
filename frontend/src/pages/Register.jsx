@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Link2 } from 'lucide-react';
+import { Link2, ArrowLeft } from 'lucide-react';
 import api from '../api/axios';
 import Input from '../components/ui/Input';
 import Button from '../components/ui/Button';
@@ -137,13 +137,13 @@ export default function Register() {
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-6 bg-slate-50 dark:bg-[#0b0f19] bg-grid-pattern text-slate-900 dark:text-slate-100">
-      {/* Top Left Branding Logo */}
-      <Link to="/dashboard" className="absolute top-6 left-6 flex items-center gap-3 z-20 hover:opacity-85 transition-opacity">
-        <div className="bg-primary p-1.5 rounded-lg text-white">
-          <Link2 size={18} />
-        </div>
-        <span className="font-bold text-base bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">LinkSphere</span>
-      </Link>
+      {/* Top Left Back Button */}
+      <div className="absolute top-6 left-6 flex items-center gap-4 z-20">
+        <Link to="/dashboard" className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3.5 py-1.5 rounded-full shadow-sm">
+          <ArrowLeft size={14} />
+          <span>Back to Home</span>
+        </Link>
+      </div>
 
       {/* Background Decorative Glowing Blobs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">

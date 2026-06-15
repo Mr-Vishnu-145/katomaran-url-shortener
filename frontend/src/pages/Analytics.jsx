@@ -68,7 +68,15 @@ export default function Analytics() {
   ];
 
   return (
-    <div className="flex flex-col gap-6 text-left">
+    <div className="flex flex-col gap-6 text-left animate-fade-in">
+      {/* Back to Dashboard Link */}
+      <div>
+        <Link to="/dashboard" className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 transition-colors bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1.5 rounded-xl shadow-sm w-fit">
+          <ArrowLeft size={14} />
+          <span>Back to Dashboard</span>
+        </Link>
+      </div>
+
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 dark:border-slate-800/80 pb-4">
         <div>

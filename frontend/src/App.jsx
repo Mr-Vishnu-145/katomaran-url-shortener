@@ -69,11 +69,11 @@ function Layout() {
 
   const handleLogout = async () => {
     try {
+      navigate('/dashboard');
       await api.post('/api/auth/logout');
       queryClient.clear();
       logout();
       toast.success('Logged out successfully', { duration: 3000 });
-      navigate('/dashboard');
     } catch (err) {
       toast.error('Logout failed');
     }
@@ -210,7 +210,7 @@ function Layout() {
 // Protected Route wrappers
 function ProtectedRoute() {
   const { isAuthenticated } = useAuthStore();
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/dashboard" replace />;
 }
 
 // Admin Route wrapper
