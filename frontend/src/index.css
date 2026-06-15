@@ -1,0 +1,410 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Open+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --theme-bg-page: #f8f9fa;
+  --theme-bg-card: #ffffff;
+  --theme-bg-sidebar: #ffffff;
+  --theme-text-primary: #1f1f1f;
+  --theme-text-secondary: #5f6368;
+  --theme-border: #cbd5e1;
+  --theme-primary: #1e8e3e;
+  --theme-primary-hover: #137333;
+  --theme-primary-bg: #e6f4ea;
+  --theme-success: #1e8e3e;
+  --theme-error: #d93025;
+  --theme-warning: #f9ab00;
+}
+
+.dark {
+  --theme-bg-page: #000000;
+  --theme-bg-card: #0c0d0f;
+  --theme-bg-sidebar: #0c0d0f;
+  --theme-text-primary: #ffffff;
+  --theme-text-secondary: #9aa0a6;
+  --theme-border: #303134;
+  --theme-primary: #34d399;
+  --theme-primary-hover: #6ee7b7;
+  --theme-primary-bg: #071f12;
+  --theme-success: #34d399;
+  --theme-error: #f87171;
+  --theme-warning: #fbbf24;
+}
+
+@layer base {
+  html, body, main, .overflow-y-auto {
+    scroll-behavior: smooth !important;
+  }
+
+  body {
+    font-family: 'Roboto', 'Open Sans', 'Inter', sans-serif;
+    background-color: var(--theme-bg-page);
+    color: var(--theme-text-primary);
+    @apply antialiased selection:bg-emerald-500/30 selection:text-emerald-950 dark:selection:text-emerald-200;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Open Sans', 'Roboto', 'Inter', sans-serif;
+  }
+}
+
+/* Premium Visual Utility Classes */
+
+/* Dotted Matrix Background Grid Pattern */
+.bg-grid-pattern {
+  background-size: 24px 24px;
+  background-image: 
+    radial-gradient(circle, rgba(30, 142, 62, 0.05) 1px, transparent 1px);
+}
+
+.dark .bg-grid-pattern {
+  background-image: 
+    radial-gradient(circle, rgba(52, 211, 153, 0.03) 1px, transparent 1px);
+}
+
+/* Glassmorphism Card Style (Opaque background for static list items to avoid scroll repaint lag) */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--theme-border);
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.04);
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+}
+
+.glass-panel:hover {
+  box-shadow: 0 12px 30px -4px rgba(30, 142, 62, 0.08), 0 4px 12px -2px rgba(30, 142, 62, 0.03);
+  border-color: var(--theme-primary) !important;
+}
+
+.dark .glass-panel {
+  background: rgba(12, 13, 15, 0.94);
+  border: 1px solid var(--theme-border);
+  box-shadow: 0 4px 18px -2px rgba(0, 0, 0, 0.7);
+}
+
+.dark .glass-panel:hover {
+  box-shadow: 0 12px 30px -4px rgba(129, 201, 149, 0.14), 0 4px 12px -2px rgba(129, 201, 149, 0.04);
+  border-color: var(--theme-primary) !important;
+}
+
+/* Glassmorphism Sticky Style (For floating overlays like Navbar and Dialogs where blur is visually useful) */
+.glass-panel-sticky {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--theme-border);
+}
+
+.dark .glass-panel-sticky {
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--theme-border);
+}
+
+/* Background blob animations */
+@keyframes float-blob-1 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(40px, -60px) scale(1.1);
+  }
+  66% {
+    transform: translate(-30px, 30px) scale(0.92);
+  }
+}
+
+@keyframes float-blob-2 {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(-40px, 50px) scale(0.92);
+  }
+  66% {
+    transform: translate(30px, -40px) scale(1.12);
+  }
+}
+
+.animate-blob-1 {
+  animation: float-blob-1 14s infinite ease-in-out;
+}
+
+.animate-blob-2 {
+  animation: float-blob-2 18s infinite ease-in-out;
+}
+
+/* Premium Glow Borders */
+.glow-border {
+  position: relative;
+}
+
+.glow-border::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(to right, #1e8e3e, #34d399);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.glow-border:hover::after {
+  opacity: 1;
+}
+
+/* Shimmer effects for dashboard headers */
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.shimmer-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer-effect::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.2) 20%,
+    rgba(255, 255, 255, 0.6) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  animation: shimmer 2.5s infinite;
+  content: '';
+}
+
+.dark .shimmer-effect::after {
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(255, 255, 255, 0.15) 60%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+/* Custom premium scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(30, 142, 62, 0.18);
+  border-radius: 9999px;
+  transition: background 0.2s ease;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(52, 211, 153, 0.14);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(30, 142, 62, 0.45);
+}
+
+/* Table refinements for glass-panels */
+table tr {
+  transition: background-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+table tbody tr:hover {
+  background-color: rgba(30, 142, 62, 0.045);
+}
+.dark table tbody tr:hover {
+  background-color: rgba(52, 211, 153, 0.035);
+}
+
+/* Details link animation */
+.group:hover .group-hover\:underline {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ==========================================================================
+   LinkSphere 100% Accurate Dark & Light Theme System Overrides & Fluid Transitions
+   ========================================================================== */
+
+/* Layout Color Variables & Utility Overrides */
+body {
+  background-color: var(--theme-bg-page) !important;
+  color: var(--theme-text-primary) !important;
+}
+
+/* Page background container classes */
+.bg-slate-50 {
+  background-color: var(--theme-bg-page) !important;
+}
+.dark .dark\:bg-\[\#0b0f19\] {
+  background-color: var(--theme-bg-page) !important;
+}
+
+/* Card & panel backgrounds */
+.bg-white {
+  background-color: var(--theme-bg-card) !important;
+}
+.dark .dark\:bg-\[\#111726\] {
+  background-color: var(--theme-bg-card) !important;
+}
+
+/* Sidebar & inner sub-container panels */
+.bg-slate-100 {
+  background-color: var(--theme-bg-sidebar) !important;
+}
+.dark .dark\:bg-slate-900 {
+  background-color: var(--theme-bg-sidebar) !important;
+}
+.bg-slate-100\/50 {
+  background-color: rgba(241, 243, 244, 0.5) !important;
+}
+.dark .dark\:bg-slate-900\/50 {
+  background-color: rgba(53, 54, 58, 0.5) !important;
+}
+
+/* Platform borders */
+.border-slate-100, 
+.border-slate-200, 
+.border-slate-250\/70, 
+.border-slate-250,
+.border-slate-300 {
+  border-color: var(--theme-border) !important;
+}
+.dark .dark\:border-slate-800, 
+.dark .dark\:border-slate-850, 
+.dark .dark\:border-slate-800\/80, 
+.dark .dark\:border-slate-800\/60,
+.dark .dark\:border-slate-800\/85 {
+  border-color: var(--theme-border) !important;
+}
+
+/* Text overrides */
+.text-slate-900, .text-slate-950, .text-slate-800, .text-slate-750 {
+  color: var(--theme-text-primary) !important;
+}
+.dark .dark\:text-slate-50, 
+.dark .dark\:text-slate-100, 
+.dark .dark\:text-slate-150, 
+.dark .dark\:text-slate-200 {
+  color: var(--theme-text-primary) !important;
+}
+
+.text-slate-400, .text-slate-500 {
+  color: var(--theme-text-secondary) !important;
+}
+.dark .dark\:text-slate-400, 
+.dark .dark\:text-slate-500,
+.dark .dark\:text-slate-450,
+.dark .dark\:text-slate-550 {
+  color: var(--theme-text-secondary) !important;
+}
+
+/* Active navigation tab background highlights */
+.bg-indigo-50 {
+  background-color: var(--theme-primary-bg) !important;
+  color: var(--theme-primary) !important;
+}
+.dark .dark\:bg-indigo-950\/20, 
+.dark .dark\:bg-indigo-950\/30 {
+  background-color: var(--theme-primary-bg) !important;
+  color: var(--theme-primary) !important;
+}
+
+.text-indigo-500, .text-indigo-600, .text-primary {
+  color: var(--theme-primary) !important;
+}
+.dark .dark\:text-indigo-400, .dark .dark\:text-indigo-300, .dark .dark\:text-primary {
+  color: var(--theme-primary) !important;
+}
+
+/* Hover background selections */
+.hover\:bg-slate-50:hover {
+  background-color: var(--theme-bg-sidebar) !important;
+}
+.dark .dark\:hover\:bg-slate-850:hover {
+  background-color: var(--theme-primary-bg) !important;
+}
+
+/* Global styled select dropdowns */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px;
+  padding-right: 32px !important;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+.dark select {
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa0a6' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+}
+
+select option {
+  background-color: var(--theme-bg-card) !important;
+  color: var(--theme-text-primary) !important;
+  font-family: inherit;
+}
+
+/* Platform interactive inputs focus ring styling */
+input:focus, select:focus, textarea:focus {
+  border-color: var(--theme-primary) !important;
+  box-shadow: 0 0 0 2px rgba(30, 142, 62, 0.25) !important;
+}
+.dark input:focus, .dark select:focus, .dark textarea:focus {
+  border-color: var(--theme-primary) !important;
+  box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.25) !important;
+}
+
+/* ==========================================================================
+   Smooth conversion animations and speed effects on theme toggle
+   ========================================================================== */
+body, 
+.glass-panel, 
+.glass-panel-sticky,
+.bg-white, 
+.bg-slate-50, 
+.bg-slate-100,
+.dark\:bg-\[\#0b0f19\], 
+.dark\:bg-\[\#111726\], 
+.dark\:bg-slate-900,
+input, 
+select, 
+textarea, 
+button, 
+a {
+  transition: background-color 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+              border-color 0.28s cubic-bezier(0.4, 0, 0.2, 1), 
+              color 0.2s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hide browser-native reveal and clear buttons for password fields to avoid duplicate icons */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear,
+input[type="password"]::-webkit-contacts-auto-fill-button,
+input[type="password"]::-webkit-credentials-auto-fill-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+

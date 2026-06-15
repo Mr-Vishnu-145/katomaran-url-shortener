@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkSphere Project Presentation</title>
+  <!-- Modern Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --theme-bg-page: #f8f9fa;
+      --theme-bg-card: #ffffff;
+      --theme-bg-sidebar: #ffffff;
+      --theme-text-primary: #1f1f1f;
+      --theme-text-secondary: #5f6368;
+      --theme-border: #cbd5e1;
+      --theme-primary: #1e8e3e;
+      --theme-primary-hover: #137333;
+      --theme-primary-bg: #e6f4ea;
+      --theme-success: #1e8e3e;
+      --theme-error: #d93025;
+      --theme-warning: #f9ab00;
+      --theme-glow: rgba(30, 142, 62, 0.15);
+      --font-header: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .dark {
+      --theme-bg-page: #0b0f19;
+      --theme-bg-card: #111726;
+      --theme-bg-sidebar: #0c0d0f;
+      --theme-text-primary: #ffffff;
+      --theme-text-secondary: #9aa0a6;
+      --theme-border: #303134;
+      --theme-primary: #34d399;
+      --theme-primary-hover: #6ee7b7;
+      --theme-primary-bg: #071f12;
+      --theme-success: #34d399;
+      --theme-error: #f87171;
+      --theme-warning: #fbbf24;
+      --theme-glow: rgba(52, 211, 153, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--theme-bg-page);
+      color: var(--theme-text-primary);
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Presentation Layout */
+    #sidebar {
+      width: 280px;
+      background-color: var(--theme-bg-sidebar);
+      border-right: 1px solid var(--theme-border);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      z-index: 20;
+      transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+    }
+
+    #sidebar-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--theme-border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    #sidebar-menu {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 8px;
+    }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--theme-text-secondary);
+      background: transparent;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+      margin-bottom: 4px;
+      font-family: var(--font-header);
+      transition: all 0.2s ease;
+    }
+
+    .menu-item:hover {
+      background-color: var(--theme-primary-bg);
+      color: var(--theme-primary);
+    }
+
+    .menu-item.active {
+      background-color: var(--theme-primary);
+      color: #0b0f19;
+    }
+    .dark .menu-item.active {
+      color: #0c0d0f;
+      font-weight: 600;
+    }
+
+    #main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #top-bar {
+      height: 70px;
+      border-bottom: 1px solid var(--theme-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      z-index: 10;
+      background: var(--theme-bg-page);
+    }
+
+    .slide-title-area h2 {
+      font-family: var(--font-header);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+    }
+
+    .controls-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid var(--theme-border);
+      border-radius: 8px;
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--theme-text-primary);
+      transition: all 0.2s ease;
+    }
+
+    .btn-icon:hover {
+      border-color: var(--theme-primary);
+      color: var(--theme-primary);
+      box-shadow: 0 0 10px var(--theme-glow);
+    }
+
+    /* Slide Engine Container */
+    #slide-canvas {
+      flex: 1;
+      padding: 30px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .slide-wrapper {
+      position: absolute;
+      top: 30px;
+      bottom: 30px;
+      left: 40px;
+      right: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(15px);
+      transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .slide-wrapper.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* Cards and Elements styling */
+    .glass-card {
+      background: var(--theme-bg-card);
+      border: 1px solid var(--theme-border);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .dark .glass-card {
+      background: rgba(17, 23, 38, 0.7);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
+    }
+
+    .glass-card:hover {
+      border-color: var(--theme-primary);
+      box-shadow: 0 8px 30px var(--theme-glow);
+    }
+
+    .glow-accent::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--theme-primary), var(--theme-primary-hover));
+    }
+
+    /* Grid layouts */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-left-heavy {
+      display: grid;
+      grid-template-columns: 1.4fr 0.8fr;
+      gap: 24px;
+    }
+
+    /* Headings and Typography */
+    h3 {
+      font-family: var(--font-header);
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--theme-primary);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--theme-text-secondary);
+    }
+
+    ul, ol {
+      padding-left: 20px;
+      color: var(--theme-text-secondary);
+      font-size: 14.5px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.5;
+    }
+
+    .highlight-text {
+      color: var(--theme-text-primary);
+      font-weight: 500;
+    }
+
+    /* Code Block styling */
+    code, pre {
+      font-family: 'Fira Code', monospace;
+      font-size: 13px;
+    }
+    
+    pre {
+      background: #080b11;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      border: 1px solid rgba(255,255,255,0.06);
+      color: #34d399;
+      height: 100%;
+    }
+
+    /* Interactive Folder Tree */
+    .tree-node {
+      margin-left: 16px;
+      border-left: 1px dashed var(--theme-border);
+      padding-left: 16px;
+    }
+
+    .tree-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 0;
+      font-size: 13.5px;
+      cursor: pointer;
+      user-select: none;
+      transition: color 0.2s ease;
+    }
+
+    .tree-item:hover {
+      color: var(--theme-primary);
+    }
+
+    .tree-item-desc {
+      color: var(--theme-text-secondary);
+      font-size: 12.5px;
+      font-family: var(--font-body);
+      margin-left: 4px;
+    }
+
+    .tree-folder::before {
+      content: '📁';
+    }
+    .tree-folder.open::before {
+      content: '📂';
+    }
+    .tree-file::before {
+      content: '📄';
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13.5px;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--theme-border);
+    }
+
+    th {
+      font-family: var(--font-header);
+      font-weight: 600;
+      color: var(--theme-primary);
+      background-color: rgba(255,255,255,0.02);
+    }
+
+    /* Navigation bottom panel */
+    #bottom-bar {
+      height: 60px;
+      border-top: 1px solid var(--theme-border);
+      padding: 0 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+      background: var(--theme-bg-page);
+    }
+
+    .controls-nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-nav {
+      background: var(--theme-primary-bg);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      padding: 8px 16px;
+      font-family: var(--font-header);
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--theme-primary);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover:not(:disabled) {
+      background-color: var(--theme-primary);
+      color: #0b0f19;
+      box-shadow: 0 0 12px var(--theme-glow);
+    }
+    
+    .dark .btn-nav:hover:not(:disabled) {
+      color: #0c0d0f;
+    }
+
+    .btn-nav:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .progress-track {
+      flex: 1;
+      height: 6px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 3px;
+      margin: 0 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(to right, var(--theme-primary), var(--theme-primary-hover));
+      transition: width 0.3s ease;
+    }
+
+    /* Database schema interactive tool */
+    .db-table-badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--theme-border);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .db-table-badge:hover, .db-table-badge.active {
+      border-color: var(--theme-primary);
+      background-color: var(--theme-primary-bg);
+      color: var(--theme-primary);
+    }
+
+    /* Schema details inspector */
+    #schema-inspector {
+      min-height: 180px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 12px;
+      padding: 16px;
+      border: 1px dashed var(--theme-border);
+    }
+
+    /* Flow charts (SVG layout details) */
+    .flow-step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 14px;
+      background: rgba(255,255,255,0.02);
+      border: 1px solid var(--theme-border);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .flow-arrow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: var(--theme-primary);
+      font-size: 24px;
+    }
+
+    /* Speaker Notes Panel styling */
+    .under-hood-toggle {
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--theme-primary);
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    
+    .under-hood-panel {
+      display: none;
+      background: rgba(30, 142, 62, 0.05);
+      border: 1px solid rgba(30, 142, 62, 0.2);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 10px;
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    .dark .under-hood-panel {
+      background: rgba(52, 211, 153, 0.04);
+      border: 1px solid rgba(52, 211, 153, 0.15);
+    }
+
+    .under-hood-panel.open {
+      display: block;
+    }
+
+    /* Dashboard badges */
+    .route-badge {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 6px;
+    }
+    .badge-get { background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.3); }
+    .badge-post { background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .badge-put { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .badge-delete { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    /* Custom Title Slide style */
+    .title-slide-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      text-align: center;
+      background-image: radial-gradient(circle at 50% 50%, rgba(52, 211, 153, 0.05) 0%, transparent 60%);
+    }
+
+    .title-slide-logo {
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--theme-primary) 0%, var(--theme-primary-hover) 100%);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      box-shadow: 0 12px 30px var(--theme-glow);
+    }
+
+    .title-slide-logo svg {
+      width: 44px;
+      height: 44px;
+      fill: #0b0f19;
+    }
+    
+    .dark .title-slide-logo svg {
+      fill: #0c0d0f;
+    }
+
+    .title-slide-container h1 {
+      font-family: var(--font-header);
+      font-size: 54px;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      background: linear-gradient(to right, var(--theme-text-primary), var(--theme-primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .title-slide-container p.subtitle {
+      font-size: 18px;
+      color: var(--theme-text-secondary);
+      max-width: 600px;
+      margin-bottom: 40px;
+    }
+
+    .title-slide-meta {
+      display: flex;
+      gap: 32px;
+      font-size: 14px;
+      color: var(--theme-text-secondary);
+      border-top: 1px solid var(--theme-border);
+      padding-top: 24px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- LEFT SIDEBAR: Index of Slides -->
+  <aside id="sidebar">
+    <div id="sidebar-header">
+      <div style="background: var(--theme-primary); width: 32px; height: 32px; border-radius: 8px; display:flex; align-items:center; justify-content:center;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0b0f19" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 18px; height: 18px;"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+      </div>
+      <div>
+        <h1 style="font-family: var(--font-header); font-size: 17px; font-weight: 800; letter-spacing: -0.5px;">LinkSphere</h1>
+        <span style="font-size: 11px; color: var(--theme-primary); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Project Deck</span>
+      </div>
+    </div>
+    
+    <nav id="sidebar-menu">
+      <button class="menu-item" onclick="goToSlide(0)"><span>01</span> Title Slide</button>
+      <button class="menu-item" onclick="goToSlide(1)"><span>02</span> Project Overview</button>
+      <button class="menu-item" onclick="goToSlide(2)"><span>03</span> Technology Stack</button>
+      <button class="menu-item" onclick="goToSlide(3)"><span>04</span> Database Schema</button>
+      <button class="menu-item" onclick="goToSlide(4)"><span>05</span> Backend Architecture</button>
+      <button class="menu-item" onclick="goToSlide(5)"><span>06</span> Core API Controllers</button>
+      <button class="menu-item" onclick="goToSlide(6)"><span>07</span> Security & Middleware</button>
+      <button class="menu-item" onclick="goToSlide(7)"><span>08</span> API Route Mapping</button>
+      <button class="menu-item" onclick="goToSlide(8)"><span>09</span> API Calls & Gateway Design</button>
+      <button class="menu-item" onclick="goToSlide(9)"><span>10</span> Frontend Architecture</button>
+      <button class="menu-item" onclick="goToSlide(10)"><span>11</span> State & API Invalidation</button>
+      <button class="menu-item" onclick="goToSlide(11)"><span>12</span> Client Pages & Views</button>
+      <button class="menu-item" onclick="goToSlide(12)"><span>13</span> Real-time Live Feed & AI</button>
+      <button class="menu-item" onclick="goToSlide(13)"><span>14</span> Flow: Onboarding & Auth</button>
+      <button class="menu-item" onclick="goToSlide(14)"><span>15</span> Flow: URL Creation</button>
+      <button class="menu-item" onclick="goToSlide(15)"><span>16</span> Flow: URL Redirection</button>
+      <button class="menu-item" onclick="goToSlide(16)"><span>17</span> Admin & Soft Delete</button>
+      <button class="menu-item" onclick="goToSlide(17)"><span>18</span> Security Implementations</button>
+      <button class="menu-item" onclick="goToSlide(18)"><span>19</span> Conclusion & Scale</button>
+    </nav>
+  </aside>
+
+  <!-- MAIN CANVAS -->
+  <main id="main-content">
+    
+    <!-- Top Nav Area -->
+    <header id="top-bar">
+      <div class="slide-title-area">
+        <h2 id="slide-header-title">LinkSphere Deck</h2>
+      </div>
+      <div class="controls-top">
+        <button class="btn-icon" id="theme-toggle-btn" title="Toggle Theme">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        </button>
+        <button class="btn-icon" id="fullscreen-btn" title="Toggle Fullscreen">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Slide Canvas -->
+    <div id="slide-canvas">
+
+      <!-- SLIDE 1: Title -->
+      <section class="slide-wrapper active" data-title="LinkSphere URL Shortener">
+        <div class="title-slide-container">
+          <div class="title-slide-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>
+          </div>
+          <h1>LinkSphere URL Shortener</h1>
+          <p class="subtitle">A Comprehensive Technical Walkthrough of the System Architecture, Codebase, Database Design, & Core Workflows.</p>
+          
+          <div class="title-slide-meta">
+            <div><strong>Tech Stack:</strong> React + Node.js + Express + PostgreSQL + Socket.io + AI</div>
+            <div><strong>Created:</strong> June 2026</div>
+            <div><strong>Focus:</strong> Performance, Analytics, Security & Admin Control</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: Project Overview -->
+      <section class="slide-wrapper" data-title="Project Overview & Core Goals">
+        <div class="grid-2">
+          <div class="glass-card glow-accent">
+            <h3>🎯 The LinkSphere Solution</h3>
+            <p style="margin-bottom:12px;">LinkSphere is a full-featured, enterprise-grade URL shortening and management application. It bridges the gap between simple link shortening and comprehensive operational business intelligence.</p>
+            <p style="margin-bottom:12px;">It enables users to generate short codes, define expiry conditions, assign custom aliases, update destinations post-creation, and review deep analytics.</p>
+            <p>For administrators, it features global dashboard reporting, user control (suspension/soft-deletion), real-time traffic monitoring, and automated AI traffic insights.</p>
+          </div>
+          <div class="glass-card">
+            <h3>🚀 Key Engineering Priorities</h3>
+            <ul style="margin-left: 20px;">
+              <li><span class="highlight-text">High-Performance Redirects:</span> Minimizing redirect latencies via server-side memory caching (<code class="highlight-text">node-cache</code>).</li>
+              <li><span class="highlight-text">Rich Visit Analytics:</span> Granular logging of device type, browser engine, operating system, geographical country (IP lookup), and referrers.</li>
+              <li><span class="highlight-text">Stateless Security:</span> Dual-token JWT architecture (short-lived access tokens, secure HTTP-only refresh tokens) + rate limiting.</li>
+              <li><span class="highlight-text">Clean Separation of Concerns:</span> A decoupled REST architecture backended by Node/Express and frontended by React/Vite.</li>
+            </ul>
+          </div>
+        </div>
+        <button class="under-hood-toggle" onclick="toggleUnderHood(this)">⚙️ Under the Hood Details</button>
+        <div class="under-hood-panel">
+          <strong>Architectural Choice:</strong> Decoupled Client-Server architecture allows frontend and backend to scale independently. Node.js's event loop naturally supports the highly concurrent request profile generated by redirection traffic. PostgreSQL provides acid compliance for links and audit trails while in-memory cache saves database reads.
+        </div>
+      </section>
+
+      <!-- SLIDE 3: Tech Stack -->
+      <section class="slide-wrapper" data-title="Technology Stack Deep Dive">
+        <div class="grid-3">
+          <div class="glass-card glow-accent">
+            <h4 style="color:var(--theme-primary); margin-bottom:8px; font-family:var(--font-header);">Frontend Client</h4>
+            <p style="font-size:13px; margin-bottom:12px;"><span class="highlight-text">React (Vite-powered):</span> Ultra-fast compilation and HMR.</p>
+            <p style="font-size:13px; margin-bottom:12px;"><span class="highlight-text">Zustand:</span> Minimalist state management for auth & theme persistence.</p>
+            <p style="font-size:13px; margin-bottom:12px;"><span class="highlight-text">TanStack Query:</span> Handles client cache, network fetching, and auto-refetch validation.</p>
+            <p style="font-size:13px;"><span class="highlight-text">Recharts & Framer Motion:</span> Premium dashboard visualizations and micro-animations.</p>
+          </div>
+          
+          <div class="glass-card glow-accent">
+            <h4 style="color:var(--theme-primary); margin-bottom:8px; font-family:var(--font-header);">API Server</h4>
+            <p style="font-size:13px; margin-bottom:12px;"><span class="highlight-text">Express (Node.js):</span> Lightweight, middleware-centric HTTP handler.</p>
+            <p style="font-size:13px; margin-bottom:12px;"><span class="highlight-text">Socket.IO:</span> Bi-directional persistent WebSockets for live analytics streaming to admin dashboards.</p>
+            <p style="font-size:13px; margin-bottom:12px;"><span class="highlight-text">Node Cache:</span> Internal in-memory engine storing redirects, avoiding heavy SQL joins on redirect hits.</p>
+            <p style="font-size:13px;"><span class="highlight-text">UA-Parser-JS:</span> Translates HTTP headers into granular browser, OS, and device metrics.</p>
+          </div>
+
+          <div class="glass-card glow-accent">
+            <h4 style="color:var(--theme-primary); margin-bottom:8px; font-family:var(--font-header);">Database & AI</h4>
+            <p style="font-size:13px; margin-bottom:12px;"><span class="highlight-text">PostgreSQL:</span> Relational persistence engine with custom indexes for fast lookup.</p>
+            <p style="font-size:13px; margin-bottom:12px;"><span class="highlight-text">Pool Client (pg):</span> Reuses TCP sockets, avoiding connection handshakes.</p>
+            <p style="font-size:13px;"><span class="highlight-text">Gemini Pro API:</span> Reads anonymized analytics aggregates and produces human-digestible charts summaries and click recommendations.</p>
+          </div>
+        </div>
+        <button class="under-hood-toggle" onclick="toggleUnderHood(this)">⚙️ Under the Hood Details</button>
+        <div class="under-hood-panel">
+          <strong>Why not an ORM?</strong> The backend uses raw SQL queries via PostgreSQL <code class="highlight-text">pg.Pool</code>. This eliminates the query abstraction overhead of ORMs like Sequelize or Prisma, allowing precision index tuning (e.g., partial index on active URLs) and faster JSON generation directly in SQL.
+        </div>
+      </section>
+
+      <!-- SLIDE 4: Database Schema -->
+      <section class="slide-wrapper" data-title="Database Schema & Indexes">
+        <div class="grid-left-heavy">
+          <div class="glass-card">
+            <h3>PostgreSQL Table Schemas</h3>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;">
+              <span class="db-table-badge active" onclick="inspectTable('users')">users</span>
+              <span class="db-table-badge" onclick="inspectTable('urls')">urls</span>
+              <span class="db-table-badge" onclick="inspectTable('url_visits')">url_visits</span>
+              <span class="db-table-badge" onclick="inspectTable('refresh_tokens')">refresh_tokens</span>
+              <span class="db-table-badge" onclick="inspectTable('password_reset_tokens')">password_reset_tokens</span>
+              <span class="db-table-badge" onclick="inspectTable('deleted_users')">deleted_users</span>
+            </div>
+            
+            <div id="schema-inspector">
+              <!-- Content loaded by JS -->
+            </div>
+          </div>
+          
+          <div class="glass-card glow-accent">
+            <h3>Database Tuning (Indexes)</h3>
+            <p style="font-size:13.5px; margin-bottom:10px;">To guarantee performance under load, critical lookup columns use explicit B-Tree indexing:</p>
+            <ol style="font-size:13px; margin-left: 20px;">
+              <li style="margin-bottom:6px;"><code class="highlight-text">idx_users_email</code>: Accelerates registration and login verification.</li>
+              <li style="margin-bottom:6px;"><code class="highlight-text">idx_urls_short_code</code>: Supports rapid query by redirect route.</li>
+              <li style="margin-bottom:6px;"><code class="highlight-text">idx_url_visits_url_id</code>: Enhances charts aggregation performance.</li>
+              <li style="margin-bottom:6px;"><code class="highlight-text">idx_urls_active</code>: A partial filter index (<code class="highlight-text">WHERE is_active = true</code>) to minimize search trees for valid redirect links.</li>
+            </ol>
+          </div>
+        </div>
+        <button class="under-hood-toggle" onclick="toggleUnderHood(this)">⚙️ Under the Hood Details</button>
+        <div class="under-hood-panel">
+          <strong>Referential Integrity:</strong> <code class="highlight-text">ON DELETE CASCADE</code> is assigned to user references, ensuring that when an account is deleted (or completely expunged), associated URLs, visits, and tokens are cleaned up instantly by the RDBMS engine.
+        </div>
+      </section>
+
+      <!-- SLIDE 5: Backend Architecture -->
+      <section class="slide-wrapper" data-title="Backend Directory Structure">
+        <div class="grid-2">
+          <div class="glass-card" style="overflow-y:auto; max-height:430px;">
+            <h3>📁 Folder Architecture</h3>
+            <div style="font-family: 'Fira Code', monospace; font-size:13px;">
+              <div class="tree-item tree-folder open" onclick="toggleTree(this)">backend/</div>
+              <div class="tree-node">
+                <div class="tree-item tree-file"><span class="tree-item-desc">server.js - entry point, sockets, mount middleware</span></div>
+                <div class="tree-item tree-file"><span class="tree-item-desc">.env - environment configuration</span></div>
+                <div class="tree-item tree-folder open" onclick="toggleTree(this)">src/</div>
+                <div class="tree-node">
+                  <div class="tree-item tree-folder" onclick="toggleTree(this)">config/</div>
+                  <div class="tree-node" style="display:none;">
+                    <div class="tree-item tree-file"><span class="tree-item-desc">db.js - PostgreSQL Pool setup</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">env.js - Env validator & export</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">migrate.js - SQL table/index migration</span></div>
+                  </div>
+                  <div class="tree-item tree-folder" onclick="toggleTree(this)">controllers/</div>
+                  <div class="tree-node" style="display:none;">
+                    <div class="tree-item tree-file"><span class="tree-item-desc">auth.js - OTP, registration, JWT lifecycle</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">url.js - Short code CRUD, caching</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">analytics.js - Aggregations, Gemini client</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">admin.js - User, URL audits and metrics</span></div>
+                  </div>
+                  <div class="tree-item tree-folder" onclick="toggleTree(this)">middleware/</div>
+                  <div class="tree-node" style="display:none;">
+                    <div class="tree-item tree-file"><span class="tree-item-desc">auth.js - requireAuth, requireAdmin</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">error.js - Centralized error mapper</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">rateLimiter.js - Login/OTP protection</span></div>
+                  </div>
+                  <div class="tree-item tree-folder" onclick="toggleTree(this)">routes/</div>
+                  <div class="tree-node" style="display:none;">
+                    <div class="tree-item tree-file"><span class="tree-item-desc">auth.js - Auth router mountpoints</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">admin.js - Administrative control router</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">urls.js - Shortener API CRUD router</span></div>
+                    <div class="tree-item tree-file"><span class="tree-item-desc">redirect.js - Short code capture & redirect</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="glass-card glow-accent">
+            <h3>⚙️ Modular MVC Pattern</h3>
+            <p style="margin-bottom:12px;">The backend implements a clean Model-View-Controller (MVC) architecture, tailored for APIs:</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Routes Layer:</strong> Express Routers receive the HTTP endpoints and delegate calls to the correct controller actions.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Middleware Layer:</strong> Handles authentication, verification, rate limiting, and global error parsing before requests hit the business logic.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Controllers Layer:</strong> Core business logic. Communicates directly with PostgreSQL via parameters queries or utilizes Node Cache.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Config Layer:</strong> Database pooling, migration triggers, and schema definition.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: Core API Controllers -->
+      <section class="slide-wrapper" data-title="Core API Controllers">
+        <div class="grid-2">
+          <div class="glass-card glow-accent">
+            <h3>🔑 Auth & Admin Controllers</h3>
+            <p style="font-size:13.5px; margin-bottom:10px;"><strong class="highlight-text">auth.js:</strong> Handles user operations.</p>
+            <ul style="font-size:13px; margin-bottom:14px; margin-left:16px;">
+              <li>Password hashing using <code class="highlight-text">bcrypt</code> with 12 salt rounds.</li>
+              <li>Google OAuth validation and user sync.</li>
+              <li>Dual-JWT generation (Access token, httpOnly refresh token).</li>
+              <li>OTP generation and expiration for account updates.</li>
+            </ul>
+            <p style="font-size:13.5px; margin-bottom:10px;"><strong class="highlight-text">admin.js:</strong> Administrative panel endpoints.</p>
+            <ul style="font-size:13px; margin-left:16px;">
+              <li>User listing, suspension toggle, and account purging.</li>
+              <li>Global link management and deletion.</li>
+              <li>Platform-wide summary metrics (total links, visits, growth rate).</li>
+              <li>Access auditing via the <code class="highlight-text">deleted_users</code> history log.</li>
+            </ul>
+          </div>
+          
+          <div class="glass-card">
+            <h3>🔗 URL & Analytics Controllers</h3>
+            <p style="font-size:13.5px; margin-bottom:10px;"><strong class="highlight-text">url.js:</strong> Link management operations.</p>
+            <ul style="font-size:13px; margin-bottom:14px; margin-left:16px;">
+              <li>Generates randomized 6-character alphanumeric shortcodes.</li>
+              <li>Validates custom aliases against database collisions.</li>
+              <li>Applies expiration timestamps.</li>
+              <li>Saves active redirects inside local <code class="highlight-text">Node Cache</code>.</li>
+            </ul>
+            <p style="font-size:13.5px; margin-bottom:10px;"><strong class="highlight-text">analytics.js:</strong> Processes telemetry data.</p>
+            <ul style="font-size:13px; margin-left:16px;">
+              <li>Performs SQL aggregations (GROUP BY browser, device, country).</li>
+              <li>Builds time-series data for traffic charts.</li>
+              <li>Coordinates with Google Gemini API to compile textual analysis summaries.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7: Security & Middleware -->
+      <section class="slide-wrapper" data-title="Security & Middleware Architecture">
+        <div class="grid-2">
+          <div class="glass-card glow-accent">
+            <h3>🛡️ Access Control & JWT Validation</h3>
+            <p style="margin-bottom:12px;">Security is structured using layered Express middlewares:</p>
+            <ol style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">requireAuth:</strong> Extracts the JSON Web Token from the HTTP Authorization header (<code class="highlight-text">Bearer &lt;token&gt;</code>). If valid, it decodes the payload, checks for account suspension or deletion, and attaches the user data to the request object.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">requireAdmin:</strong> Runs after authentication validation. Confirms that the decoded user payload has <code class="highlight-text">role === 'admin'</code>. If not, it blocks request execution with a 403 Forbidden payload.</li>
+            </ol>
+          </div>
+          
+          <div class="glass-card">
+            <h3>🧱 Rate Limiter & Global Error Handler</h3>
+            <p style="font-size:13.5px; margin-bottom:10px;"><strong class="highlight-text">express-rate-limit:</strong> Configured on public-facing endpoints (e.g. login and registration) to prevent credential stuffing. Limit: 5 requests per 15 minutes.</p>
+            <p style="font-size:13.5px; margin-bottom:10px;"><strong class="highlight-text">Centralized Error Middleware:</strong> Catches unhandled promise rejections. Instead of returning raw Node stack traces which reveal server paths, it converts errors into clean JSON formats:</p>
+            <pre style="max-height:160px;">
+{
+  "status": "error",
+  "code": "INTERNAL_SERVER_ERROR",
+  "message": "An unexpected error occurred"
+}</pre>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 8: API Route Mapping -->
+      <section class="slide-wrapper" data-title="API Route Mapping">
+        <div class="glass-card glow-accent" style="flex:1; overflow-y:auto;">
+          <h3>📋 Backend Router Configuration</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Route Endpoint</th>
+                <th>HTTP Method</th>
+                <th>Auth Level</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><span class="route-badge badge-post">POST</span> <code class="highlight-text">/api/auth/register</code></td>
+                <td>POST</td>
+                <td>Public</td>
+                <td>User account creation with phone verification</td>
+              </tr>
+              <tr>
+                <td><span class="route-badge badge-post">POST</span> <code class="highlight-text">/api/auth/login</code></td>
+                <td>POST</td>
+                <td>Public</td>
+                <td>Credential validation, dual-JWT setup</td>
+              </tr>
+              <tr>
+                <td><span class="route-badge badge-post">POST</span> <code class="highlight-text">/api/auth/refresh</code></td>
+                <td>POST</td>
+                <td>Cookie refresh</td>
+                <td>Rotates access token via secure HTTP-Only refresh cookie</td>
+              </tr>
+              <tr>
+                <td><span class="route-badge badge-get">GET</span> <code class="highlight-text">/api/urls</code></td>
+                <td>GET</td>
+                <td>User Auth</td>
+                <td>List user's shortened links with pagination</td>
+              </tr>
+              <tr>
+                <td><span class="route-badge badge-post">POST</span> <code class="highlight-text">/api/urls</code></td>
+                <td>POST</td>
+                <td>User Auth</td>
+                <td>Create shortcode/alias and store in DB + Cache</td>
+              </tr>
+              <tr>
+                <td><span class="route-badge badge-delete">DELETE</span> <code class="highlight-text">/api/admin/users/:id</code></td>
+                <td>DELETE</td>
+                <td>Admin Auth</td>
+                <td>Audit-logged user deletion</td>
+              </tr>
+              <tr>
+                <td><span class="route-badge badge-get">GET</span> <code class="highlight-text">/:shortCode</code></td>
+                <td>GET</td>
+                <td>Public</td>
+                <td>Redirect hit entry-point, analytics processor</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- SLIDE 9: API Calls & Gateway Design -->
+      <section class="slide-wrapper" data-title="API Calls & Gateway Design">
+        <div class="grid-2">
+          <div class="glass-card glow-accent">
+            <h3>⚡ Client-to-Server API Calls</h3>
+            <p style="margin-bottom:12px;"><strong class="highlight-text">Axios client configuration:</strong> Serves as the centralized communication bridge between the frontend React shell and backend.</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Request Interceptor:</strong> Monitors Zustand state and injects JWT authorization headers (<code class="highlight-text">Bearer token</code>) on every outgoing call transparently.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Response Interceptor (JWT Rotation):</strong> If an API call fails with a <code class="highlight-text">401 Unauthorized</code> status, it intercepts the stream, sends a request to the backend <code class="highlight-text">/refresh</code> route, updates the client tokens, and retries the original request seamlessly.</li>
+            </ul>
+          </div>
+          
+          <div class="glass-card">
+            <h3>🌐 Backend Routing & Gateway</h3>
+            <p style="margin-bottom:12px;"><strong class="highlight-text">Express Server Gateway:</strong> Routes client requests and matches prefixes (<code class="highlight-text">/api/auth</code>, <code class="highlight-text">/api/urls</code>) to route files and controllers.</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Redirection Gateway:</strong> Matches shortcodes via <code class="highlight-text">GET /:shortCode</code>, checks local memory cache (<code class="highlight-text">NodeCache</code>) to bypass DB delay, returns a <code class="highlight-text">302 Found</code> redirect immediately, and logs visitor analytics asynchronously.</li>
+            </ul>
+          </div>
+        </div>
+        <button class="under-hood-toggle" onclick="toggleUnderHood(this)">⚙️ Under the Hood Details</button>
+        <div class="under-hood-panel">
+          <strong>Design Motivation:</strong> Interceptors keep security concerns out of individual page components. Redirect handling is prioritized for speed—issuing a 302 header before database logging finishes to reduce latency.
+        </div>
+      </section>
+
+      <!-- SLIDE 10: Frontend Architecture -->
+      <section class="slide-wrapper" data-title="Frontend Architecture">
+        <div class="grid-2">
+          <div class="glass-card" style="overflow-y:auto; max-height:430px;">
+            <h3>📁 React Client Directory Map</h3>
+            <div style="font-family: 'Fira Code', monospace; font-size:13px;">
+              <div class="tree-item tree-folder open" onclick="toggleTree(this)">frontend/src/</div>
+              <div class="tree-node">
+                <div class="tree-item tree-file"><span class="tree-item-desc">main.jsx - Root bootstrap, query configuration</span></div>
+                <div class="tree-item tree-file"><span class="tree-item-desc">App.jsx - Application Router & router guards</span></div>
+                <div class="tree-item tree-file"><span class="tree-item-desc">index.css - Custom vanilla variable design system</span></div>
+                <div class="tree-item tree-folder" onclick="toggleTree(this)">api/</div>
+                <div class="tree-node" style="display:none;">
+                  <div class="tree-item tree-file"><span class="tree-item-desc">axios.js - Token rotation interceptors</span></div>
+                </div>
+                <div class="tree-item tree-folder" onclick="toggleTree(this)">store/</div>
+                <div class="tree-node" style="display:none;">
+                  <div class="tree-item tree-file"><span class="tree-item-desc">authStore.js - Zustand session & dark theme state</span></div>
+                </div>
+                <div class="tree-item tree-folder" onclick="toggleTree(this)">pages/</div>
+                <div class="tree-node" style="display:none;">
+                  <div class="tree-item tree-file"><span class="tree-item-desc">Login.jsx / Register.jsx - Authentication panels</span></div>
+                  <div class="tree-item tree-file"><span class="tree-item-desc">Dashboard.jsx - Link management center</span></div>
+                  <div class="tree-item tree-file"><span class="tree-item-desc">UrlDetail.jsx - Performance charts & stats</span></div>
+                  <div class="tree-item tree-file"><span class="tree-item-desc">AdminDashboard.jsx - Admin system console</span></div>
+                </div>
+                <div class="tree-item tree-folder" onclick="toggleTree(this)">components/</div>
+                <div class="tree-node" style="display:none;">
+                  <div class="tree-item tree-file"><span class="tree-item-desc">Navbar.jsx / Sidebar.jsx - Main shell layouts</span></div>
+                  <div class="tree-item tree-folder">ui/</div>
+                  <div class="tree-node" style="display:none;">
+                    <div class="tree-item tree-file"><span class="tree-item-desc">Button.jsx / Card.jsx / Input.jsx / Select.jsx</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="glass-card glow-accent">
+            <h3>⚡ Powered by React + Vite</h3>
+            <p style="margin-bottom:12px;">The React application is optimized for speed, code-splitting, and asset delivery via Vite's bundling engine:</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Single-Page App (SPA):</strong> Navigation uses <code class="highlight-text">react-router-dom</code> to maintain state without browser page refreshes.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Route Guards:</strong> Protected routing components check authentication state, preventing access to the dashboard.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Glassmorphism UI:</strong> Custom CSS gradients, backdrop-filters, and transitions design a modern, fluid workspace interface.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 10: State & API Invalidation -->
+      <section class="slide-wrapper" data-title="State & API Invalidation">
+        <div class="grid-2">
+          <div class="glass-card glow-accent">
+            <h3>🐻 Local State Management (Zustand)</h3>
+            <p style="margin-bottom:12px;">Zustand is used for quick, lightweight global variables instead of heavy React Context wrappers:</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Session Management:</strong> Stores user details, login state, and JWT tokens. Accessible globally in two lines of code without triggering full app re-renders.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">App Initialization:</strong> Controls splash screen rendering during initial auth status checks.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Theme Preference:</strong> Persists user preference (dark/light) inside local storage and modifies body class lists immediately.</li>
+            </ul>
+          </div>
+          
+          <div class="glass-card">
+            <h3>🔄 Server State & Cache Invalidation</h3>
+            <p style="margin-bottom:12px;"><strong class="highlight-text">TanStack React Query</strong> manages all remote HTTP data exchanges, loading indicators, and caching policies:</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Query Keys:</strong> Keeps requests organized. (<code class="highlight-text">['urls']</code>, <code class="highlight-text">['analytics', id]</code>).</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Auto-Invalidation:</strong> When a user creates or deletes a URL, query cache keys are invalidated, prompting background updates without reloading.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Axios Interceptors:</strong> If an API call fails with a 401 Unauthorized status, the interceptor automatically attempts to rotate the access token using the HTTP-Only cookie, repeating the original call transparently.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 11: Client Pages & Views -->
+      <section class="slide-wrapper" data-title="Client Pages & Views">
+        <div class="grid-3">
+          <div class="glass-card glow-accent">
+            <h4 style="color:var(--theme-primary); margin-bottom:8px; font-family:var(--font-header);">Interactive Dashboard</h4>
+            <p style="font-size:13px; margin-bottom:10px;">The user panel features URL list management, search filtering, and custom alias configuration.</p>
+            <p style="font-size:13px;">Integrated copy-to-clipboard, quick delete actions, custom expiration controls, and detail page redirection.</p>
+          </div>
+          
+          <div class="glass-card glow-accent">
+            <h4 style="color:var(--theme-primary); margin-bottom:8px; font-family:var(--font-header);">URL Analytics & Detail</h4>
+            <p style="font-size:13px; margin-bottom:10px;">Visual metrics for individual URLs displaying:</p>
+            <ul style="font-size:12px; margin-left:14px; margin-bottom:10px;">
+              <li>Device type ratios (Desktop, Mobile, Tablet).</li>
+              <li>Browsers & OS breakdown.</li>
+              <li>Country of origin map charts.</li>
+            </ul>
+            <p style="font-size:13px;">Also displays detailed tables listing the exact logs of recent visitors.</p>
+          </div>
+
+          <div class="glass-card glow-accent">
+            <h4 style="color:var(--theme-primary); margin-bottom:8px; font-family:var(--font-header);">Admin Dashboard Console</h4>
+            <p style="font-size:13px; margin-bottom:10px;">Full console allowing system administrators to search users, review activity logs, suspend accounts, and view global server metrics.</p>
+            <p style="font-size:13px;">Integrates a real-time event ticker displaying redirect visitor hits as they occur.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 12: Real-time Live Feed & AI -->
+      <section class="slide-wrapper" data-title="Real-time Live Feed & AI Engine">
+        <div class="grid-2">
+          <div class="glass-card glow-accent">
+            <h3>📡 Real-time Updates (Socket.IO)</h3>
+            <p style="margin-bottom:12px;">LinkSphere keeps administrators informed without manual refresh polling:</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">WebSocket Connection:</strong> Built on Socket.IO, the frontend admin console opens a persistent full-duplex TCP stream to the server.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Event Emitter:</strong> Every time a visitor accesses a shortened code, the redirect router captures analytics, saves to PostgreSQL, and emits a <code class="highlight-text">new_visit</code> payload.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Reactive UI:</strong> The React app catches the event and inserts the record into the active user feed with CSS animations.</li>
+            </ul>
+          </div>
+          
+          <div class="glass-card">
+            <h3>🤖 AI Traffic Insights (Gemini Pro)</h3>
+            <p style="margin-bottom:12px;">Analytics charts can be complex. LinkSphere integrates Google's Gemini LLM to interpret patterns:</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Anonymized Aggregates:</strong> The server compiles anonymized visit statistics (clicks per day, device types, top countries) into structured JSON.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Contextual Prompts:</strong> Sends the data to Gemini with custom instructions to describe traffic shifts.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Actionable Insights:</strong> Returns detailed takeaways (e.g. "Mobile iOS traffic in Canada increased 35% on Wednesday after a referral surge from X").</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 13: Flow: Authentication -->
+      <section class="slide-wrapper" data-title="Flow: Onboarding & Authentication">
+        <div class="glass-card glow-accent" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+          <h3 style="margin-bottom:30px;">🔐 Complete Authentication Flow</h3>
+          
+          <div style="display:grid; grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr; gap:10px; align-items:center;">
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">1. Client Request</span>
+              <p style="font-size:11px;">User submits credentials via Login/Register page.</p>
+            </div>
+            <div class="flow-arrow">➡️</div>
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">2. Server Validation</span>
+              <p style="font-size:11px;">Bcrypt compares hashed credentials or verifies Google OAuth.</p>
+            </div>
+            <div class="flow-arrow">➡️</div>
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">3. Tokens Issuance</span>
+              <p style="font-size:11px;">Access token is issued; Refresh token is stored in HTTP-only Cookie.</p>
+            </div>
+            <div class="flow-arrow">➡️</div>
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">4. Navigation Guard</span>
+              <p style="font-size:11px;">Zustand is updated; Route guards open the application Dashboard.</p>
+            </div>
+          </div>
+          
+          <button class="under-hood-toggle" onclick="toggleUnderHood(this)" style="margin-top:40px;">⚙️ Under the Hood Details</button>
+          <div class="under-hood-panel">
+            <strong>Token Rotation Pattern:</strong> Setting access token lifetime to 15 minutes restricts damage from token leakage. If the token expires, the client calls the <code class="highlight-text">/refresh</code> endpoint automatically in the background using the secure, httpOnly, sameSite=strict refresh cookie.
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 14: Flow: URL Creation -->
+      <section class="slide-wrapper" data-title="Flow: URL Creation & Validation">
+        <div class="glass-card glow-accent" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+          <h3 style="margin-bottom:30px;">🔗 URL Shortener Generation Lifecycle</h3>
+          
+          <div style="display:grid; grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr; gap:10px; align-items:center;">
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">1. User Submission</span>
+              <p style="font-size:11px;">User provides original URL, custom alias (optional), and expiration date.</p>
+            </div>
+            <div class="flow-arrow">➡️</div>
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">2. Validation Check</span>
+              <p style="font-size:11px;">Server checks URL syntax, alias duplication, and expiration limits.</p>
+            </div>
+            <div class="flow-arrow">➡️</div>
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">3. PostgreSQL Store</span>
+              <p style="font-size:11px;">Stores URL entry with a unique shortcode mapped to the user ID.</p>
+            </div>
+            <div class="flow-arrow">➡️</div>
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">4. Cache Warming</span>
+              <p style="font-size:11px;">Sets shortcode-to-original mapping inside NodeCache memory.</p>
+            </div>
+          </div>
+          
+          <button class="under-hood-toggle" onclick="toggleUnderHood(this)" style="margin-top:40px;">⚙️ Under the Hood Details</button>
+          <div class="under-hood-panel">
+            <strong>Validation Rules:</strong> The backend verifies that the original URL is validly formatted via URL API validation. If a custom alias is provided, it is alphanumeric parsed to prevent SQL injections and URL formatting issues.
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 15: Flow: URL Redirection -->
+      <section class="slide-wrapper" data-title="Flow: URL Redirection & Telemetry">
+        <div class="glass-card glow-accent" style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+          <h3 style="margin-bottom:30px;">⚡ Redirection Traffic pipeline</h3>
+          
+          <div style="display:grid; grid-template-columns: 1fr 40px 1fr 40px 1fr 40px 1fr; gap:10px; align-items:center;">
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">1. Visitor Hit</span>
+              <p style="font-size:11px;">Visitor requests shortened address: <code style="font-size:10px;">/lnkS</code>.</p>
+            </div>
+            <div class="flow-arrow">➡️</div>
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">2. Caching Verification</span>
+              <p style="font-size:11px;">Checks Node Cache. If cache miss, queries DB and updates cache.</p>
+            </div>
+            <div class="flow-arrow">➡️</div>
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">3. Telemetry Gathering</span>
+              <p style="font-size:11px;">Asynchronously logs country, agent, browser, OS, and client IP.</p>
+            </div>
+            <div class="flow-arrow">➡️</div>
+            <div class="flow-step">
+              <span style="font-weight:600; color:var(--theme-primary); font-size:13px; margin-bottom:4px;">4. Redirect Output</span>
+              <p style="font-size:11px;">Responds to visitor with an immediate HTTP 302 redirect header.</p>
+            </div>
+          </div>
+          
+          <button class="under-hood-toggle" onclick="toggleUnderHood(this)" style="margin-top:40px;">⚙️ Under the Hood Details</button>
+          <div class="under-hood-panel">
+            <strong>Performance Design:</strong> The redirect router issues the HTTP response header (<code class="highlight-text">302 Found</code>) *before* finishing SQL database logs insertion for telemetry. This guarantees that visitors are redirected instantly, and database write operations do not block the user experience.
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 16: Admin & Soft Delete -->
+      <section class="slide-wrapper" data-title="Admin Operations & Soft Delete">
+        <div class="grid-2">
+          <div class="glass-card glow-accent">
+            <h3>🛑 Administrative Moderation Actions</h3>
+            <p style="margin-bottom:12px;">LinkSphere provides robust operational administrative controls to manage security threats:</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">User Suspension:</strong> Flipping <code class="highlight-text">is_suspended = true</code> locks the target user out of their session. The authentication middleware rejects active tokens immediately, blocking unauthorized operations.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Link Deactivation:</strong> Admins can force deactivate any link. Deactivation instantly wipes the item from the server-side redirection cache.</li>
+            </ul>
+          </div>
+          
+          <div class="glass-card">
+            <h3>🗑️ Secure Soft-Deletion Audit Logs</h3>
+            <p style="margin-bottom:12px;">To maintain historical context and support GDPR/compliance policies, account deletion implements a soft-delete mechanism:</p>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Deleted User Register:</strong> Deletion updates status to <code class="highlight-text">deleted</code>. It copies account metadata (excluding hashed passwords) into the <code class="highlight-text">deleted_users</code> table.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Cascade Purging:</strong> This trigger safely disables their active short links and invalidates related active cookies and sessions.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Audit logs:</strong> Enables compliance monitoring for systems auditing and administrative tracking.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 17: Security Implementations -->
+      <section class="slide-wrapper" data-title="Security Implementations">
+        <div class="grid-2">
+          <div class="glass-card glow-accent">
+            <h3>⚙️ Defense-in-Depth Mechanisms</h3>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Parameterized Database Queries:</strong> Avoids inline SQL string concats. Protects database structures from SQL injection attacks.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Bcrypt Hashing:</strong> Safe, computational-heavy encryption rounds make brute-force attacks infeasible.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Security Headers (Helmet):</strong> Restricts MIME types, implements XSS protection, and configures Strict-Transport-Security.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">CORS Whitelisting:</strong> Server rejects API access from unauthorized domains.</li>
+            </ul>
+          </div>
+          
+          <div class="glass-card">
+            <h3>🍪 Secure JWT Session Architecture</h3>
+            <p style="font-size:13.5px; margin-bottom:10px;"><strong class="highlight-text">Two-Token authentication pattern:</strong></p>
+            <ol style="margin-left:20px; font-size:13px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Access Token:</strong> Short lifetime (15 mins), stored in client memory (volatile). Sent in Authorization header. Minimal risk if leaked.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Refresh Token:</strong> Long lifetime (7 days), stored in database. Sent only to client via secure, httpOnly, sameSite=strict cookie. Restricted from JavaScript access (preventing XSS access).</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Suspension Sync:</strong> Both tokens are validated against database suspension records upon each call.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 18: Conclusion & Scale -->
+      <section class="slide-wrapper" data-title="Conclusion & Scale-out Plan">
+        <div class="grid-2">
+          <div class="glass-card glow-accent">
+            <h3>🏁 Project Takeaways</h3>
+            <p style="margin-bottom:12px;">LinkSphere represents a fast, secure, modern platform for handling URL shortener workloads. By separating the client app from the REST API, using cache layers, and supporting real-time event updates, it provides an outstanding developer layout and user experience.</p>
+            <p>The code is fully structured, index-tuned, and audited for credential vulnerabilities.</p>
+          </div>
+          
+          <div class="glass-card">
+            <h3>📈 Future Scalability Path</h3>
+            <ul style="margin-left: 20px; font-size:13.5px;">
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Distributed Caching (Redis):</strong> Transition local Node Cache to a dedicated Redis cluster, allowing scaling across multiple backend instances.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Database Read Replicas:</strong> Route heavy analytical read queries (Gemini analytics) to PostgreSQL read-replicas while reserving primary database node for writes.</li>
+              <li style="margin-bottom:8px;"><strong class="highlight-text">Docker Containerization:</strong> Containerize frontend and backend to support auto-scaling orchestrations via Kubernetes.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Bottom Nav Controls -->
+    <footer id="bottom-bar">
+      <div style="font-size: 14px; font-weight: 500; font-family: var(--font-header);">
+        Slide <span id="current-slide-num">1</span> of <span id="total-slide-num">19</span>
+      </div>
+      
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-indicator"></div>
+      </div>
+      
+      <div class="controls-nav">
+        <button class="btn-nav" id="prev-btn" onclick="prevSlide()" disabled>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Previous
+        </button>
+        <button class="btn-nav" id="next-btn" onclick="nextSlide()">
+          Next
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+    </footer>
+
+  </main>
+
+  <script>
+    // Slide Navigation State
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide-wrapper');
+    const totalSlides = slides.length;
+    const slideTitleNumEl = document.getElementById('current-slide-num');
+    const totalSlideNumEl = document.getElementById('total-slide-num');
+    const progressFillEl = document.getElementById('progress-indicator');
+    const prevBtn = document.getElementById('prev-btn');
+    const nextBtn = document.getElementById('next-btn');
+    const sidebarMenuItems = document.querySelectorAll('.menu-item');
+    const slideHeaderTitleEl = document.getElementById('slide-header-title');
+
+    // Database schema details
+    const dbTables = {
+      users: {
+        title: "Table: users",
+        description: "Stores user accounts, authentication types, and permission metadata.",
+        columns: [
+          { name: "id", type: "UUID", desc: "Primary key. Default: gen_random_uuid()" },
+          { name: "email", type: "VARCHAR(255)", desc: "Unique index. Primary email login identifier" },
+          { name: "password_hash", type: "VARCHAR(255)", desc: "Bcrypt hash. Nullable for Google OAuth accounts" },
+          { name: "role", type: "VARCHAR(50)", desc: "Default: 'user'. Values: 'user' or 'admin'" },
+          { name: "is_suspended", type: "BOOLEAN", desc: "Default: false. Suspension flag" },
+          { name: "status", type: "VARCHAR(50)", desc: "Default: 'active'. Values: 'active', 'suspended', 'deleted'" },
+          { name: "full_name", type: "VARCHAR(255)", desc: "User's display profile name" },
+          { name: "auth_provider", type: "VARCHAR(50)", desc: "Default: 'email'. Values: 'email', 'google'" },
+          { name: "google_id", type: "VARCHAR(255)", desc: "Unique index. Identifies synchronized Google accounts" },
+          { name: "profile_image", type: "TEXT", desc: "URL link to active profile image" },
+          { name: "mobile_number", type: "VARCHAR(50)", desc: "User phone number for profile logging" },
+          { name: "otp_code", type: "VARCHAR(6)", desc: "One-time code for profile verification updates" },
+          { name: "otp_expires_at", type: "TIMESTAMPTZ", desc: "Verification code expiration timestamp" }
+        ]
+      },
+      urls: {
+        title: "Table: urls",
+        description: "Stores created links and redirects destination URLs mapped to users.",
+        columns: [
+          { name: "id", type: "UUID", desc: "Primary key. Default: gen_random_uuid()" },
+          { name: "user_id", type: "UUID (FK)", desc: "References users(id) ON DELETE CASCADE. Null for anonymous" },
+          { name: "original_url", type: "TEXT", desc: "Target destination URL link" },
+          { name: "short_code", type: "VARCHAR(50)", desc: "Unique index. Randomized code or custom alias" },
+          { name: "click_count", type: "INTEGER", desc: "Default: 0. Aggregated redirection visitor click count" },
+          { name: "is_active", type: "BOOLEAN", desc: "Default: true. Control state flag for active redirect" },
+          { name: "expires_at", type: "TIMESTAMPTZ", desc: "Nullable expiration cutoff time" }
+        ]
+      },
+      url_visits: {
+        title: "Table: url_visits",
+        description: "Captures analytics data for each redirect click event.",
+        columns: [
+          { name: "id", type: "UUID", desc: "Primary key. Default: gen_random_uuid()" },
+          { name: "url_id", type: "UUID (FK)", desc: "References urls(id) ON DELETE CASCADE. Not Null" },
+          { name: "visited_at", type: "TIMESTAMPTZ", desc: "Default: CURRENT_TIMESTAMP. Creation log timestamp" },
+          { name: "visitor_id", type: "VARCHAR(100)", desc: "Identifies unique visitor session tags" },
+          { name: "ip_address", type: "VARCHAR(45)", desc: "Anonymized IP address for geo-lookup" },
+          { name: "user_agent", type: "TEXT", desc: "Raw HTTP user-agent header string" },
+          { name: "referer", type: "TEXT", desc: "Traffic referral source link" },
+          { name: "country", type: "VARCHAR(100)", desc: "Parsed country code name" },
+          { name: "device_type", type: "VARCHAR(100)", desc: "Device categorization: Desktop, Mobile, Tablet" },
+          { name: "browser", type: "VARCHAR(100)", desc: "Parsed client browser engine" }
+        ]
+      },
+      refresh_tokens: {
+        title: "Table: refresh_tokens",
+        description: "Persists secure browser user tokens to support stateless session persistence.",
+        columns: [
+          { name: "id", type: "UUID", desc: "Primary key. Default: gen_random_uuid()" },
+          { name: "user_id", type: "UUID (FK)", desc: "References users(id) ON DELETE CASCADE. Not Null" },
+          { name: "token", type: "TEXT", desc: "Unique refresh token payload string" },
+          { name: "device_name", type: "VARCHAR(255)", desc: "Logging metadata for user session audits" },
+          { name: "ip_address", type: "VARCHAR(45)", desc: "Last accessed IP address record" },
+          { name: "expires_at", type: "TIMESTAMPTZ", desc: "Fixed session expiration timestamp" }
+        ]
+      },
+      password_reset_tokens: {
+        title: "Table: password_reset_tokens",
+        description: "Manages verification tokens for forgot-password workflows.",
+        columns: [
+          { name: "id", type: "UUID", desc: "Primary key" },
+          { name: "user_id", type: "UUID (FK)", desc: "References users(id) ON DELETE CASCADE. Not Null" },
+          { name: "token", type: "VARCHAR(255)", desc: "Unique secure validator token" },
+          { name: "expires_at", type: "TIMESTAMPTZ", desc: "Short-lived expiry timestamp" }
+        ]
+      },
+      deleted_users: {
+        title: "Table: deleted_users",
+        description: "Auditing catalog logging user accounts deletion history.",
+        columns: [
+          { name: "id", type: "UUID", desc: "Primary key" },
+          { name: "user_id", type: "UUID", desc: "Original user primary key reference" },
+          { name: "email", type: "VARCHAR(255)", desc: "Deleted account email address" },
+          { name: "full_name", type: "VARCHAR(255)", desc: "Deleted account user display name" },
+          { name: "deleted_at", type: "TIMESTAMPTZ", desc: "Default: CURRENT_TIMESTAMP. Audit time" }
+        ]
+      }
+    };
+
+    // Initialize Presentation state
+    function initPresentation() {
+      totalSlideNumEl.textContent = totalSlides;
+      updateSlideView();
+      inspectTable('users'); // load default db schema details
+    }
+
+    // Slide view changer
+    function updateSlideView() {
+      slides.forEach((slide, index) => {
+        if (index === currentSlide) {
+          slide.classList.add('active');
+          const title = slide.getAttribute('data-title') || "LinkSphere Deck";
+          slideHeaderTitleEl.textContent = title;
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      // Update sidebar active highlights
+      sidebarMenuItems.forEach((item, index) => {
+        if (index === currentSlide) {
+          item.classList.add('active');
+          // auto scroll item into view inside menu
+          item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+        } else {
+          item.classList.remove('active');
+        }
+      });
+
+      // Update Slide numbers & progress bars
+      slideTitleNumEl.textContent = currentSlide + 1;
+      const progressPercent = ((currentSlide + 1) / totalSlides) * 100;
+      progressFillEl.style.width = `${progressPercent}%`;
+
+      // Controls disability state
+      prevBtn.disabled = currentSlide === 0;
+      nextBtn.disabled = currentSlide === totalSlides - 1;
+    }
+
+    // Navigation Methods
+    function nextSlide() {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlideView();
+      }
+    }
+
+    function prevSlide() {
+      if (currentSlide > 0) {
+        currentSlide--;
+        updateSlideView();
+      }
+    }
+
+    function goToSlide(index) {
+      if (index >= 0 && index < totalSlides) {
+        currentSlide = index;
+        updateSlideView();
+      }
+    }
+
+    // Keybindings listener
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      }
+    });
+
+    // Theme Selector control logic
+    const themeToggleBtn = document.getElementById('theme-toggle-btn');
+    themeToggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+    });
+
+    // Fullscreen control
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    fullscreenBtn.addEventListener('click', () => {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.error(`Error enabling fullscreen: ${err.message}`);
+        });
+      } else {
+        document.exitFullscreen();
+      }
+    });
+
+    // Database Schema Table Inspector
+    function inspectTable(tableName) {
+      // Toggle active table button state
+      const badges = document.querySelectorAll('.db-table-badge');
+      badges.forEach(badge => {
+        if (badge.textContent.trim() === tableName) {
+          badge.classList.add('active');
+        } else {
+          badge.classList.remove('active');
+        }
+      });
+
+      const tableData = dbTables[tableName];
+      if (!tableData) return;
+
+      const inspector = document.getElementById('schema-inspector');
+      
+      let html = `
+        <h4 style="color: var(--theme-primary); margin-bottom: 4px; font-family: var(--font-header); font-size:16px;">${tableData.title}</h4>
+        <p style="font-size:13px; color: var(--theme-text-secondary); margin-bottom: 12px;">${tableData.description}</p>
+        <div style="overflow-y: auto; max-height: 200px;">
+          <table style="font-size:12px;">
+            <thead>
+              <tr>
+                <th style="padding: 6px 8px;">Column Name</th>
+                <th style="padding: 6px 8px;">Data Type</th>
+                <th style="padding: 6px 8px;">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      tableData.columns.forEach(col => {
+        html += `
+          <tr>
+            <td style="padding: 6px 8px; font-family: 'Fira Code', monospace; color: var(--theme-text-primary); font-weight:500;">${col.name}</td>
+            <td style="padding: 6px 8px; font-family: 'Fira Code', monospace; color: var(--theme-primary);">${col.type}</td>
+            <td style="padding: 6px 8px; color: var(--theme-text-secondary);">${col.desc}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+            </tbody>
+          </table>
+        </div>
+      `;
+
+      inspector.innerHTML = html;
+    }
+
+    // Toggle interactive tree lists open/close state
+    function toggleTree(item) {
+      item.classList.toggle('open');
+      const nextNode = item.nextElementSibling;
+      if (nextNode && nextNode.classList.contains('tree-node')) {
+        nextNode.style.display = nextNode.style.display === 'none' ? 'block' : 'none';
+      }
+    }
+
+    // Speaker notes details toggler
+    function toggleUnderHood(button) {
+      const panel = button.nextElementSibling;
+      if (panel && panel.classList.contains('under-hood-panel')) {
+        panel.classList.toggle('open');
+        button.textContent = panel.classList.contains('open') ? '▲ Collapse Details' : '⚙️ Under the Hood Details';
+      }
+    }
+
+    // Run bootstrap
+    window.addEventListener('DOMContentLoaded', initPresentation);
+  </script>
+</body>
+</html>
