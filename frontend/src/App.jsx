@@ -106,7 +106,7 @@ function Layout() {
     <div className="flex h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0b0f19] bg-grid-pattern">
       {/* Desktop Sidebar */}
       <Sidebar isCollapsed={isCollapsed} />
-      
+
       {/* Mobile Sidebar Overlay Drawer */}
       <AnimatePresence>
         {mobileSidebarOpen && (
@@ -132,7 +132,7 @@ function Layout() {
           </>
         )}
       </AnimatePresence>
-      
+
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Navbar toggleMobileSidebar={() => setMobileSidebarOpen(!mobileSidebarOpen)} />
         <main className="flex-1 overflow-y-auto p-6 md:p-8 flex flex-col justify-between">
@@ -150,7 +150,7 @@ function Layout() {
               </motion.div>
             </AnimatePresence>
           </div>
-          
+
 
 
           <footer className="border-t border-slate-200 dark:border-slate-800/80 pt-8 pb-4 text-slate-500 dark:text-slate-400 w-full max-w-6xl mx-auto shrink-0 mt-12">
@@ -195,9 +195,9 @@ function Layout() {
             <div className="border-t border-slate-150 dark:border-slate-850 pt-4 flex flex-col sm:flex-row justify-between items-center gap-2 text-[10px] uppercase font-bold tracking-wider text-slate-400 dark:text-slate-500">
               <span>© {new Date().getFullYear()} LinkSphere. All rights reserved.</span>
               <div className="flex gap-4">
-                <a href="#github" className="hover:text-primary transition-colors">Github</a>
-                <a href="#twitter" className="hover:text-primary transition-colors">Twitter</a>
-                <a href="#discord" className="hover:text-primary transition-colors">Discord</a>
+                <a href="https://github.com/Mr-Vishnu-145/katomaran-url-shortener" className="hover:text-primary transition-colors">Github</a>
+                {/* <a href="#twitter" className="hover:text-primary transition-colors">Twitter</a>
+                <a href="#discord" className="hover:text-primary transition-colors">Discord</a> */}
               </div>
             </div>
           </footer>
@@ -252,7 +252,7 @@ export default function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        
+
         <Route element={<Layout />}>
           {/* Public routes under main Layout */}
           <Route path="/dashboard" element={<Dashboard />} />
@@ -262,7 +262,7 @@ export default function App() {
           <Route path="/privacy" element={<PrivacyPolicy />} />
           <Route path="/terms" element={<TermsOfService />} />
           <Route path="/cookies" element={<CookiePolicy />} />
-          
+
           {/* Protected routes under main Layout */}
           <Route element={<ProtectedRoute />}>
             <Route path="/urls/:id" element={<UrlDetail />} />
@@ -271,7 +271,7 @@ export default function App() {
             <Route path="/settings/security" element={<UserSecurity />} />
             <Route path="/settings/sessions" element={<UserSessions />} />
             <Route path="/settings" element={<Navigate to="/settings/profile" replace />} />
-            
+
             {/* Admin specific */}
             <Route element={<AdminRoute />}>
               <Route path="/admin" element={<AdminDashboard />} />

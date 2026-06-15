@@ -4,7 +4,7 @@ const { DATABASE_URL } = require('./env');
 
 async function runMigration() {
   console.log("Starting Database Migration...");
-  
+
   // Extract database name and base URL
   // e.g. postgresql://postgres:root@localhost:5432/linksphere_ai
   const matches = DATABASE_URL.match(/\/([^\/\?]+)(\?.*)?$/);
@@ -14,10 +14,11 @@ async function runMigration() {
   }
   const dbName = matches[1];
   const baseUrl = DATABASE_URL.substring(0, DATABASE_URL.length - dbName.length - (matches[2] ? matches[2].length : 0));
-  
-  // Connect to default 'postgres' database to create linksphere_ai database if not exists
-  const client = new Client({ connectionString: baseUrl + 'postgres' });
+
+  // Connect to default 'postgres' database to create database if not exists
   try {
+    const defaultDbUrl = baseUrl + 'postgres' + (matches[2] || '');
+    const client = new Client({ connectionString: defaultDbUrl });
     await client.connect();
     const dbCheck = await client.query("SELECT 1 FROM pg_database WHERE datname = $1", [dbName]);
     if (dbCheck.rows.length === 0) {
@@ -28,21 +29,20 @@ async function runMigration() {
     } else {
       console.log(`Database ${dbName} already exists.`);
     }
-  } catch (err) {
-    console.error("Error creating database:", err.message);
-    process.exit(1);
-  } finally {
     await client.end();
+  } catch (err) {
+    console.warn("Notice: Could not automatically verify or create database (normal on managed hosts like Neon or Supabase):", err.message);
+    console.log(`Proceeding to connect directly to target database "${dbName}" and run migrations...`);
   }
 
   // Connect to linksphere_ai database to create tables
   const dbClient = new Client({ connectionString: DATABASE_URL });
   try {
     await dbClient.connect();
-    
+
     // Begin Transaction
     await dbClient.query('BEGIN');
-    
+
     // Create Tables
     await dbClient.query(`
       CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
@@ -91,7 +91,7 @@ async function runMigration() {
         created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
       );
     `);
-    
+
     // Alter users table to support Google login, and create reset tokens table
     await dbClient.query(`
       ALTER TABLE users ADD COLUMN IF NOT EXISTS full_name VARCHAR(255);
@@ -124,13 +124,13 @@ async function runMigration() {
         deleted_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
       );
     `);
-    
+
     // Sync status with is_suspended
     await dbClient.query(`
       UPDATE users SET status = 'suspended' WHERE is_suspended = true AND status = 'active';
       UPDATE users SET is_suspended = true WHERE status = 'suspended' OR status = 'deleted';
     `);
-    
+
     // Create Indexes
     await dbClient.query(`
       CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
@@ -141,7 +141,7 @@ async function runMigration() {
       CREATE INDEX IF NOT EXISTS idx_url_visits_visitor_id ON url_visits(visitor_id);
       CREATE INDEX IF NOT EXISTS idx_urls_active ON urls(short_code) WHERE is_active = true;
     `);
-    
+
     // Update existing admin email from admin@katomaran.com to admin@gmail.com if it exists
     await dbClient.query("UPDATE users SET email = 'admin@gmail.com' WHERE email = 'admin@katomaran.com'");
 
@@ -159,7 +159,7 @@ async function runMigration() {
     } else {
       console.log("Admin account already exists.");
     }
-    
+
     await dbClient.query('COMMIT');
     console.log("Database Migration and Seeding finished successfully.");
   } catch (err) {
