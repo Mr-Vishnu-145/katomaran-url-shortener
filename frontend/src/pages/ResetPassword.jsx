@@ -58,8 +58,16 @@ export default function ResetPassword() {
 
   return (
     <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-6 bg-slate-50 dark:bg-[#0b0f19] bg-grid-pattern text-slate-900 dark:text-slate-100">
-      {/* Top Left Back Button */}
-      <div className="absolute top-6 left-6 flex items-center gap-4 z-20">
+      {/* Top Left Branding */}
+      <div className="absolute top-6 left-6 flex items-center gap-2.5 z-20 pointer-events-none select-none">
+        <div className="bg-primary p-1 rounded-lg w-7 h-7 flex items-center justify-center">
+          <img src="/favicon.svg" alt="LinkSphere Logo" className="w-4.5 h-4.5 object-contain" />
+        </div>
+        <span className="font-extrabold text-sm bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent tracking-tight">LinkSphere</span>
+      </div>
+
+      {/* Top Right Back Button */}
+      <div className="absolute top-6 right-6 flex items-center gap-4 z-20">
         <Link to="/dashboard" className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3.5 py-1.5 rounded-full shadow-sm">
           <ArrowLeft size={14} />
           <span>Back to Home</span>
@@ -67,10 +75,7 @@ export default function ResetPassword() {
       </div>
 
       <div className="w-full max-w-md glass-panel rounded-2xl p-8 shadow-lg flex flex-col gap-6 relative z-10">
-        <div className="flex flex-col items-center gap-3 text-center">
-          <div className="bg-primary p-2.5 rounded-xl w-12 h-12 flex items-center justify-center">
-            <img src="/favicon.svg" alt="LinkSphere Logo" className="w-7 h-7 object-contain" />
-          </div>
+        <div className="flex flex-col items-center gap-1.5 text-center">
           <h1 className="text-2xl font-bold">Reset Password</h1>
           <p className="text-xs text-slate-500 dark:text-slate-400">
             Set your new credentials to secure your LinkSphere account

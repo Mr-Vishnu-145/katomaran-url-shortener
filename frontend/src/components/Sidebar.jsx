@@ -39,11 +39,11 @@ export default function Sidebar({ isCollapsed, onMobileClose, mobile = false }) 
         : ("hidden md:flex flex-col glass-panel !border-y-0 !border-l-0 !rounded-none border-r border-slate-100 dark:border-slate-800/80 transition-all duration-300 " + (isCollapsed ? 'w-20' : 'w-64'))
     }>
       <div className="h-16 flex items-center justify-between px-6 border-b border-slate-100 dark:border-slate-800/60">
-        <div className="flex items-center gap-3">
-          <div className="bg-primary p-1 rounded-lg w-7.5 h-7.5 flex items-center justify-center">
-            <img src="/favicon.svg" alt="LinkSphere Logo" className="w-5.5 h-5.5 object-contain" />
+        <div className="flex items-center gap-2.5">
+          <div className="bg-primary p-1 rounded-lg w-7 h-7 flex items-center justify-center">
+            <img src="/favicon.svg" alt="LinkSphere Logo" className="w-4.5 h-4.5 object-contain" />
           </div>
-          {(!isCollapsed || mobile) && <span className="font-bold text-base bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">LinkSphere</span>}
+          {(!isCollapsed || mobile) && <span className="font-bold text-sm bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">LinkSphere</span>}
         </div>
         {mobile && onMobileClose && (
           <button 
