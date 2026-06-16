@@ -792,7 +792,7 @@ export default function Dashboard() {
                 <Skeleton className="h-6 w-4/5 bg-slate-100 dark:bg-slate-800" />
               </div>
             ) : (
-              <div className="flex flex-col gap-2 flex-1 justify-center max-h-[140px] overflow-y-auto pr-1">
+              <div className="flex flex-col gap-2 flex-1 justify-start max-h-[140px] overflow-y-auto pr-1">
                 {activeStats?.aiInsights?.map((insight, idx) => {
                   let label = "INSIGHT";
                   let colorClass = "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border-emerald-500/20";

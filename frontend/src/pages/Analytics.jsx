@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { BarChart3, Globe, Smartphone, Compass, ArrowLeft, ArrowUpRight, ShieldCheck, Activity, Link2, Calendar, RefreshCw } from 'lucide-react';
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
@@ -8,6 +8,8 @@ import Select from '../components/ui/Select';
 import Skeleton from '../components/ui/Skeleton';
 import useAuthStore from '../store/authStore';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import io from 'socket.io-client';
+import toast from 'react-hot-toast';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid, PieChart, Pie, Cell, BarChart, Bar, Legend } from 'recharts';
 
 export default function Analytics() {
@@ -18,6 +20,45 @@ export default function Analytics() {
   const urlIdParam = searchParams.get('id');
   
   const [selectedId, setSelectedId] = useState(urlIdParam || (user?.role === 'admin' ? 'platform' : 'all'));
+  const queryClient = useQueryClient();
+  const [socketConnected, setSocketConnected] = useState(false);
+
+  // Real-time WebSocket listener
+  useEffect(() => {
+    if (!user?.id) return;
+    const socket = io(import.meta.env.VITE_API_URL || window.location.origin);
+
+    socket.on('connect', () => setSocketConnected(true));
+    socket.on('disconnect', () => setSocketConnected(false));
+    socket.on('connect_error', () => setSocketConnected(false));
+
+    // Join user room for personal updates
+    socket.emit('join-user-room', user.id);
+
+    // Join admin room if admin
+    if (user.role === 'admin') {
+      socket.emit('join-admin-room', user.id);
+    }
+
+    const handleUpdate = (event) => {
+      // Invalidate query scope to fetch fresh stats in background
+      queryClient.invalidateQueries({ queryKey: ['campaign-analytics'] });
+      queryClient.invalidateQueries({ queryKey: ['analytics-dropdown-urls'] });
+      
+      toast.success(`Live Click recorded on /${event.shortCode}`, {
+        id: `analytics-toast-${event.shortCode}-${Date.now()}`,
+        duration: 3000,
+        position: 'top-center'
+      });
+    };
+
+    socket.on('click-update', handleUpdate);
+    socket.on('admin-click-update', handleUpdate);
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [user?.id, queryClient]);
 
   useEffect(() => {
     if (urlIdParam) {
@@ -83,9 +124,26 @@ export default function Analytics() {
           <h1 className="text-2xl font-bold text-slate-850 dark:text-slate-50 flex items-center gap-2">
             <BarChart3 className="text-primary" /> Link Analytics Dashboard
           </h1>
-          <p className="text-xs text-slate-400 dark:text-slate-500 mt-1">
-            Real-time visitor telemetry, devices breakdown, and referrer traffic channels.
-          </p>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-1 text-xs text-slate-400 dark:text-slate-500">
+            <span>Real-time visitor telemetry, devices breakdown, and referrer traffic channels.</span>
+            <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">|</span>
+            <div className="flex items-center gap-1.5 shrink-0">
+              {socketConnected ? (
+                <>
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wide">WebSocket Live</span>
+                </>
+              ) : (
+                <>
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                  <span className="text-[9px] font-bold text-amber-400 uppercase tracking-wide">Polling Fallback</span>
+                </>
+              )}
+            </div>
+          </div>
         </div>
 
         <div className="flex items-center gap-2 w-full sm:w-auto">

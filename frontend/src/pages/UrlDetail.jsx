@@ -10,6 +10,8 @@ import Card from '../components/ui/Card';
 import Select from '../components/ui/Select';
 import Skeleton from '../components/ui/Skeleton';
 import toast from 'react-hot-toast';
+import io from 'socket.io-client';
+import useAuthStore from '../store/authStore';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -19,6 +21,7 @@ export default function UrlDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [socketConnected, setSocketConnected] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({ originalUrl: '', isActive: true, expiresAt: '' });
   const [formError, setFormError] = useState({});
@@ -105,6 +108,44 @@ export default function UrlDetail() {
     queryKey: ['url-analytics', id],
     queryFn: () => api.get('/api/urls/' + id + '/analytics').then(res => res.data.data),
   });
+
+  // Real-time WebSocket listener
+  useEffect(() => {
+    const userId = analytics?.url?.user_id;
+    if (!userId) return;
+    const socket = io(import.meta.env.VITE_API_URL || window.location.origin);
+
+    socket.on('connect', () => setSocketConnected(true));
+    socket.on('disconnect', () => setSocketConnected(false));
+    socket.on('connect_error', () => setSocketConnected(false));
+
+    // Join room for the link owner
+    socket.emit('join-user-room', userId);
+
+    // Join admin room if current user is admin
+    const currentUser = useAuthStore.getState().user;
+    if (currentUser?.role === 'admin') {
+      socket.emit('join-admin-room', currentUser.id);
+    }
+
+    const handleUpdate = (event) => {
+      if (event.urlId === id) {
+        queryClient.invalidateQueries({ queryKey: ['url-analytics', id] });
+        toast.success('Live visit recorded!', {
+          id: `urldetail-toast-${id}-${Date.now()}`,
+          duration: 3000,
+          position: 'top-center'
+        });
+      }
+    };
+
+    socket.on('click-update', handleUpdate);
+    socket.on('admin-click-update', handleUpdate);
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [id, analytics?.url?.user_id, queryClient]);
 
   // Derive the base URL for the short link.
   // In dev: VITE_API_URL is empty so we fall back to the backend server (e.g. http://localhost:5000).
@@ -322,6 +363,22 @@ export default function UrlDetail() {
             ) : (
               <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-red-50 dark:bg-red-950/20 text-error border border-red-100 dark:border-red-950/30">Inactive</span>
             )}
+            <div className="flex items-center gap-1.5 ml-1">
+              {socketConnected ? (
+                <>
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                  </span>
+                  <span className="text-[9px] font-bold text-emerald-500 uppercase tracking-wide">Live Updates</span>
+                </>
+              ) : (
+                <>
+                  <span className="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+                  <span className="text-[9px] font-bold text-amber-400 uppercase tracking-wide">Polling</span>
+                </>
+              )}
+            </div>
           </div>
           <p className="text-sm text-slate-500 truncate max-w-lg mb-2">{url.original_url}</p>
           <div className="flex items-center gap-4 text-xs text-slate-400">
