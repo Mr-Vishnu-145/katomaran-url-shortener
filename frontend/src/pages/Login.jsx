@@ -110,18 +110,16 @@ export default function Login() {
   return (
     <GoogleOAuthProvider clientId={googleClientId || "1083011382404-mockclientid.apps.googleusercontent.com"}>
       <div className="min-h-screen relative overflow-hidden flex items-center justify-center p-6 bg-slate-50 dark:bg-[#0b0f19] bg-grid-pattern text-slate-900 dark:text-slate-100">
-        {/* Top Left Branding */}
-        <div className="absolute top-6 left-6 flex items-center gap-2.5 z-20 pointer-events-none select-none">
-          <div className="bg-primary p-1 rounded-lg w-7 h-7 flex items-center justify-center">
-            <img src="/favicon.svg" alt="LinkSphere Logo" className="w-4.5 h-4.5 object-contain" />
+        {/* Top Left Branding & Back Button */}
+        <div className="absolute top-6 left-6 flex flex-col gap-2.5 z-20">
+          <div className="flex items-center gap-2.5 select-none">
+            <div className="bg-primary p-1 rounded-lg w-7 h-7 flex items-center justify-center">
+              <img src="/favicon.svg" alt="LinkSphere Logo" className="w-4.5 h-4.5 object-contain" />
+            </div>
+            <span className="font-extrabold text-sm bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent tracking-tight">LinkSphere</span>
           </div>
-          <span className="font-extrabold text-sm bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent tracking-tight">LinkSphere</span>
-        </div>
-
-        {/* Top Right Back Button */}
-        <div className="absolute top-6 right-6 flex items-center gap-4 z-20">
-          <Link to="/dashboard" className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3.5 py-1.5 rounded-full shadow-sm">
-            <ArrowLeft size={14} />
+          <Link to="/dashboard" className="flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-primary dark:text-slate-400 dark:hover:text-primary transition-colors bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 px-3 py-1 rounded-full shadow-sm w-fit">
+            <ArrowLeft size={12} />
             <span>Back to Home</span>
           </Link>
         </div>
