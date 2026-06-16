@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, Link2, LogOut, LayoutDashboard, Settings, User } from 'lucide-react';
+import { Menu, LogOut, LayoutDashboard, Settings, User } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import ThemeToggle from './ThemeToggle';
 import Button from './ui/Button';
@@ -49,8 +49,8 @@ export default function Navbar({ toggleMobileSidebar }) {
           <Menu size={20} />
         </button>
         <div className="flex items-center gap-2 md:hidden">
-          <div className="bg-primary p-1.5 rounded-lg text-white">
-            <Link2 size={16} />
+          <div className="bg-primary p-1 rounded-lg w-7 h-7 flex items-center justify-center">
+            <img src="/favicon.svg" alt="LinkSphere Logo" className="w-4.5 h-4.5 object-contain" />
           </div>
           <span className="font-bold text-sm dark:text-white">LinkSphere</span>
         </div>

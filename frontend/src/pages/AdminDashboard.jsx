@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Users, Link2, BarChart3, ShieldAlert, ShieldCheck, Activity, Sparkles, ExternalLink, Zap, RefreshCw, Wifi, WifiOff, ChevronRight } from 'lucide-react';
+import { Users, BarChart3, ShieldAlert, ShieldCheck, Activity, Sparkles, ExternalLink, Zap, RefreshCw, Wifi, WifiOff, ChevronRight } from 'lucide-react';
 import io from 'socket.io-client';
 import useAuthStore from '../store/authStore';
 import api from '../api/axios';

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { Link2, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import useAuthStore from '../store/authStore';
 import api from '../api/axios';
@@ -125,7 +125,10 @@ export default function Login() {
         </div>
 
         <div className="w-full max-w-md glass-panel rounded-2xl p-8 shadow-lg flex flex-col gap-6 relative z-10">
-          <div className="flex flex-col items-center gap-1.5 text-center">
+          <div className="flex flex-col items-center gap-3 text-center">
+            <div className="bg-primary p-2.5 rounded-xl w-12 h-12 flex items-center justify-center">
+              <img src="/favicon.svg" alt="LinkSphere Logo" className="w-7 h-7 object-contain" />
+            </div>
             <h1 className="text-2xl font-bold">Welcome back</h1>
             <p className="text-xs text-slate-500 dark:text-slate-400">
               Sign in to manage your short links with analytics

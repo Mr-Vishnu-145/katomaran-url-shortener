@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Link2 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import useAuthStore from './store/authStore';
 import api from './api/axios';
@@ -36,8 +35,8 @@ function AppLoadingSplash() {
       >
         {/* Logo */}
         <div className="flex items-center gap-3">
-          <div className="bg-emerald-500 p-2.5 rounded-xl shadow-lg shadow-emerald-500/30">
-            <Link2 size={22} className="text-white" />
+          <div className="bg-emerald-500 p-2 rounded-xl shadow-lg shadow-emerald-500/30 w-11 h-11 flex items-center justify-center">
+            <img src="/favicon.svg" alt="LinkSphere Logo" className="w-7 h-7 object-contain" />
           </div>
           <span className="font-extrabold text-xl bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent tracking-tight">
             LinkSphere
@@ -158,8 +157,8 @@ function Layout() {
               {/* Brand Column */}
               <div className="col-span-2 md:col-span-1 flex flex-col gap-3">
                 <div className="flex items-center gap-2">
-                  <div className="bg-primary p-1.5 rounded-lg text-white">
-                    <Link2 size={16} />
+                  <div className="bg-primary p-1 rounded-lg w-7 h-7 flex items-center justify-center">
+                    <img src="/favicon.svg" alt="LinkSphere Logo" className="w-5 h-5 object-contain" />
                   </div>
                   <span className="font-extrabold text-sm bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">LinkSphere</span>
                 </div>

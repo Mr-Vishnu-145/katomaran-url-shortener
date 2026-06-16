@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { BarChart3, Globe, Smartphone, Compass, ArrowLeft, ArrowUpRight, ShieldCheck, Activity, Link2, Calendar, RefreshCw } from 'lucide-react';
+import { BarChart3, Globe, Smartphone, Compass, ArrowLeft, ArrowUpRight, ShieldCheck, Activity, Calendar, RefreshCw } from 'lucide-react';
 import { Link, useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import api from '../api/axios';
 import Card from '../components/ui/Card';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, LogOut, Link2, ShieldAlert, Settings, X, BarChart3 } from 'lucide-react';
+import { LayoutDashboard, LogOut, ShieldAlert, Settings, X, BarChart3 } from 'lucide-react';
 import { useQueryClient } from '@tanstack/react-query';
 import useAuthStore from '../store/authStore';
 import api from '../api/axios';
@@ -40,8 +40,8 @@ export default function Sidebar({ isCollapsed, onMobileClose, mobile = false }) 
     }>
       <div className="h-16 flex items-center justify-between px-6 border-b border-slate-100 dark:border-slate-800/60">
         <div className="flex items-center gap-3">
-          <div className="bg-primary p-1.5 rounded-lg text-white">
-            <Link2 size={18} />
+          <div className="bg-primary p-1 rounded-lg w-7.5 h-7.5 flex items-center justify-center">
+            <img src="/favicon.svg" alt="LinkSphere Logo" className="w-5.5 h-5.5 object-contain" />
           </div>
           {(!isCollapsed || mobile) && <span className="font-bold text-base bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">LinkSphere</span>}
         </div>

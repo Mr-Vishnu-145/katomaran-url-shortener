@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { ArrowLeft, User, Shield, Link2, Eye, Calendar, Phone, Mail, ShieldAlert, AlertTriangle, Trash2, ShieldCheck, Activity } from 'lucide-react';
+import { ArrowLeft, User, Shield, Eye, Calendar, Phone, Mail, ShieldAlert, AlertTriangle, Trash2, ShieldCheck, Activity } from 'lucide-react';
 import api from '../api/axios';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
