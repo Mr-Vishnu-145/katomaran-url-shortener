@@ -6,6 +6,12 @@ This project is a part of a hackathon run by https://katomaran.com
 
 ---
 
+## 🔗 Live Application Links
+- **Production Website (Frontend)**: [https://katomaran-url-shortener-lac.vercel.app](https://katomaran-url-shortener-lac.vercel.app)
+- **Production API Server (Backend)**: [https://katomaran-url-shortener.onrender.com](https://katomaran-url-shortener.onrender.com)
+
+---
+
 ## 🏗️ Architecture Diagram
 
 ```mermaid
