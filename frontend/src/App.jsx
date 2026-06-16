@@ -229,6 +229,8 @@ export default function App() {
       try {
         const res = await api.get('/api/auth/me');
         login(null, res.data.data);
+        // Force redirect to dashboard on initial page load or browser refresh if logged in
+        window.history.replaceState(null, '', '/dashboard');
       } catch (err) {
         logout();
       } finally {
